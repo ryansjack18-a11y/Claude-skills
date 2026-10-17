@@ -1,0 +1,72 @@
+{
+  "skill_name": "html5-game-engineering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "can you make me a snake game i can play in the browser? want it to work on my phone too when im on the bus. make it look nice",
+      "expected_output": "Single index.html snake game: start screen, live score, game over with saved best score; on-screen/swipe controls on phones; no reversing into itself on fast double turns; frame-rate independent tick.",
+      "files": [],
+      "expectations": [
+        "Single self-contained index.html: no external scripts/styles/images/URLs and no network requests",
+        "Sound synthesized with Web Audio, no audio files",
+        "requestAnimationFrame loop with delta-time or fixed timestep, delta clamped",
+        "Responsive wrapper (flex/grid, max-width, aspect-ratio, viewport meta); no horizontal overflow at 375px",
+        "A thrown runtime error is caught and shown on screen in a debug overlay",
+        "High score/progress in localStorage guarded by try/catch",
+        "Arrow/space keys preventDefault()-ed during play; page does not scroll",
+        "Touch/pointer controls exist and touch-action is set",
+        "Start screen, game over/victory screen, and restart all present",
+        "Loads and survives 4s of random input with no uncaught exceptions",
+        "All inline scripts parse; no placeholder/truncation markers",
+        "Direction changes are queued and validated against the last queued direction so two quick turns cannot reverse the snake into itself",
+        "Phone play is supported via on-screen D-pad or swipe gestures",
+        "Food never spawns on the snake's body"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I have this idea for a game: you're a lighthouse keeper on a stormy night and you rotate the lighthouse beam to reveal rocks so ships can steer around them. ships that get lit up avoid the rocks, ones in the dark crash. Can you build it as a browser game?",
+      "expected_output": "Single index.html real-time arcade game built from an abstract concept: rotating beam controlled by keyboard and touch, ships, rocks, crashes cost lives, ramping difficulty, start/game over screens with high score.",
+      "files": [],
+      "expectations": [
+        "Single self-contained index.html: no external scripts/styles/images/URLs and no network requests",
+        "Sound synthesized with Web Audio, no audio files",
+        "requestAnimationFrame loop with delta-time or fixed timestep, delta clamped",
+        "Responsive wrapper (flex/grid, max-width, aspect-ratio, viewport meta); no horizontal overflow at 375px",
+        "A thrown runtime error is caught and shown on screen in a debug overlay",
+        "High score/progress in localStorage guarded by try/catch",
+        "Arrow/space keys preventDefault()-ed during play; page does not scroll",
+        "Touch/pointer controls exist and touch-action is set",
+        "Start screen, game over/victory screen, and restart all present",
+        "Loads and survives 4s of random input with no uncaught exceptions",
+        "All inline scripts parse; no placeholder/truncation markers",
+        "The beam can be rotated by keyboard AND by touch/pointer",
+        "Ships in the beam steer around rocks; ships in the dark can crash, costing lives",
+        "Difficulty ramps over time (more/faster ships or storm effects)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build me a hex-grid Lights Out style logic puzzle: tapping a hex flips it and its 6 neighbours, goal is to turn all of them off. Want 10 levels of increasing size, a move counter, undo, and it should remember which levels I've beaten.",
+      "expected_output": "Single index.html turn-based puzzle: hex grid, correct neighbour flipping, 10 solvable levels of increasing size, move counter, undo, level select/progress persisted in localStorage, victory screen.",
+      "files": [],
+      "expectations": [
+        "Single self-contained index.html: no external scripts/styles/images/URLs and no network requests",
+        "Sound synthesized with Web Audio, no audio files",
+        "requestAnimationFrame loop with delta-time or fixed timestep, delta clamped",
+        "Responsive wrapper (flex/grid, max-width, aspect-ratio, viewport meta); no horizontal overflow at 375px",
+        "A thrown runtime error is caught and shown on screen in a debug overlay",
+        "High score/progress in localStorage guarded by try/catch",
+        "Arrow/space keys preventDefault()-ed during play; page does not scroll",
+        "Touch/pointer controls exist and touch-action is set",
+        "Start screen, game over/victory screen, and restart all present",
+        "Loads and survives 4s of random input with no uncaught exceptions",
+        "All inline scripts parse; no placeholder/truncation markers",
+        "Tapping a hex flips it and exactly its (up to) 6 hex neighbours",
+        "10 levels of increasing size, each guaranteed solvable (generated from solved state by legal presses or verified)",
+        "Move counter and working undo",
+        "Beaten levels are persisted in localStorage and shown in a level select"
+      ]
+    }
+  ]
+}
