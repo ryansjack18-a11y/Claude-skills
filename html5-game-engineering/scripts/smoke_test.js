@@ -99,7 +99,9 @@ async function play(page, ms) {
       pageErrors.length ? pageErrors.slice(0, 3).join(' | ') : 'no uncaught exceptions during 4 s of random input');
     add('no_console_errors', consoleErrors.length ? 'WARN' : 'PASS',
       consoleErrors.length ? consoleErrors.slice(0, 3).join(' | ') : 'console clean');
-    add('arrow_keys_prevent_scroll', probe.arrows && probe.prevented / probe.arrows > 0.8 ? 'PASS' : 'FAIL',
+    const usesKeys = /Arrow(Up|Down|Left|Right)|KeyW|keyCode\s*===?\s*3[7-9]/.test(await page.content());
+    if (!usesKeys) add('arrow_keys_prevent_scroll', 'INFO', 'game does not use arrow keys; not applicable');
+    else add('arrow_keys_prevent_scroll', probe.arrows && probe.prevented / probe.arrows > 0.8 ? 'PASS' : 'FAIL',
       `${probe.prevented}/${probe.arrows} arrow/space presses were preventDefault()-ed`);
     add('self_contained_network', external.length ? 'FAIL' : 'PASS',
       external.length ? 'requested: ' + [...new Set(external)].slice(0, 3).join(', ') : 'no network requests');

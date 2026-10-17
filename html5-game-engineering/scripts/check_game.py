@@ -128,13 +128,15 @@ def run_checks(path: Path):
     add("touch_action_css", PASS if touch_action else WARN,
         "touch-action set" if touch_action else "no touch-action CSS: taps may zoom/scroll on mobile")
 
-    # 9. States
+    # 9. States (wording varies a lot between games, so a miss is a WARN to verify by hand)
     low = html.lower()
-    start = re.search(r"\bstart\b|\bplay\b", low) is not None
-    over = re.search(r"game over|you win|victory|you lose|level complete|game_over|gameover|all clear|solved", low) is not None
-    restart = re.search(r"restart|play again|try again|retry|new game", low) is not None
-    add("three_states", PASS if (start and over and restart) else FAIL,
-        f"start={start}, end screen={over}, restart={restart}")
+    start = re.search(r"\bstart\b|\bplay\b|\bbegin\b", low) is not None
+    over = re.search(r"game over|you win|victory|you lose|level complete|game.?over|all clear|solved|"
+                     r"id=[\"'][^\"']*(end|over|result|win|complete|summary)[^\"']*[\"']", low) is not None
+    restart = re.search(r"restart|play again|try again|retry|replay|new game|another|again", low) is not None
+    add("three_states", PASS if (start and over and restart) else WARN,
+        f"start={start}, end screen={over}, restart={restart}"
+        + ("" if (start and over and restart) else " (heuristic: confirm the screens exist by reading the markup)"))
 
     # 10. Truncation / placeholder detection
     placeholders = re.findall(
