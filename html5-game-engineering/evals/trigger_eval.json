@@ -1,0 +1,22 @@
+[
+ {"query": "my 8 yo is obsessed with flappy bird, can u make a version where its a little dragon flying between castle towers? she'll play it on the ipad", "should_trigger": true},
+ {"query": "Build a minesweeper clone I can drop onto my portfolio site. single html file please, no frameworks, and it should remember best times", "should_trigger": true},
+ {"query": "want something fun for our sprint retro: whack-a-mole but the moles are jira bugs lol. just needs to open in the browser on the shared screen", "should_trigger": true},
+ {"query": "Can you code a space invaders style shooter with canvas + vanilla JS? power-ups, a boss every 5 waves, and a high score table", "should_trigger": true},
+ {"query": "make a typing game where words fall from the top of the screen and you have to type them before they hit the ground, gets faster each level", "should_trigger": true},
+ {"query": "here's my tetris.html (pasted below). pieces drop way faster on my 144hz monitor than on my laptop and the arrow keys scroll the whole page. can you fix it and clean it up?", "should_trigger": true},
+ {"query": "Game idea: you're a cat knocking stuff off a shelf, pricier items = more points, but if you're too loud the owner wakes up. can you turn this into something I can actually play?", "should_trigger": true},
+ {"query": "Create a sokoban puzzle with like 15 levels, undo, and a level select. needs to work offline on a school chromebook", "should_trigger": true},
+ {"query": "could you throw together a 2 player pong where one person uses W/S and the other uses the arrow keys on the same laptop", "should_trigger": true},
+ {"query": "I'm teaching intro web dev and want a polished example of a memory card matching game to show students, vanilla JS only, with sound effects made in code", "should_trigger": true},
+ {"query": "Godot or Unity for a 2D pixel-art platformer if I eventually want to ship on Steam and Switch? solo dev, know some C#", "should_trigger": false},
+ {"query": "my Unity PlayerController jitters when the cinemachine camera follows it, I'm moving the rigidbody in Update with transform.position. what am I doing wrong?", "should_trigger": false},
+ {"query": "write a snake game in python with pygame for my CS homework, it has to use classes and a main loop", "should_trigger": false},
+ {"query": "Can you write an 800 word review of Hollow Knight: Silksong for my gaming blog? casual tone, spoiler free", "should_trigger": false},
+ {"query": "build a landing page for my indie game studio: hero section with our trailer embedded, a screenshot gallery, and a newsletter signup form", "should_trigger": false},
+ {"query": "I need a chess move validator in TypeScript for our backend: just the rules engine (castling, en passant, promotion), no UI, with jest tests", "should_trigger": false},
+ {"query": "explain the difference between requestAnimationFrame and setInterval and why my CSS animations stutter when I use setInterval", "should_trigger": false},
+ {"query": "set up a three.js scene with orbit controls that shows our GLB model of an office chair on the product page, with nice lighting", "should_trigger": false},
+ {"query": "make a discord bot in node that runs trivia rounds in a channel and keeps a leaderboard in sqlite", "should_trigger": false},
+ {"query": "design a printable D&D 5e character sheet for my players, one page, with spots for spells and inventory", "should_trigger": false}
+]
