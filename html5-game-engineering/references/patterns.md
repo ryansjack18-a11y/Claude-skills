@@ -240,6 +240,13 @@ canvas.addEventListener('pointerdown', (e) => {
 });
 canvas.addEventListener('pointermove', (e) => { if (dragging) { const { x } = toGame(e); paddle.targetX = x; } });
 ```
+- Mixed control (mouse aim *and* keys): only apply pointer aim while
+  `input.lastDevice === 'pointer'`. Otherwise a mouse resting over the canvas overrides
+  every key press:
+  ```js
+  canvas.addEventListener('pointermove', (e) => { if (input.lastDevice === 'pointer') aimAt(toGame(e)); });
+  // in update(): if (input.isDown('ArrowLeft')) beam.angle -= TURN * dt; ...
+  ```
 - `touch-action: none` on the canvas is required, or the browser will scroll and zoom.
 - Make tap targets at least ~44 CSS px on phones. At small scales a 20-logical-px tile
   may be far smaller than that on screen, so enlarge hit areas beyond the drawn shape.

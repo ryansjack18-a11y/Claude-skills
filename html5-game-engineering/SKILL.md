@@ -162,6 +162,15 @@ when two turns arrive within one tick (patterns §1). Arrow keys and Space are
 `preventDefault()`-ed so the page doesn't scroll, but Enter/Space on focused buttons still work.
 Held keys are cleared on window blur.
 
+When the keyboard and the pointer control the same thing (aim with the mouse *or* the
+arrow keys), don't let one silently override the other. A mouse resting over the canvas
+must not snap the aim back every frame while the player uses the keys. Follow
+`input.lastDevice`: keys take control on keydown, and the pointer takes control only when it
+actually moves. This is the most common way generated games end up with "the keyboard
+doesn't work". Keep the template's `keyCode()` fallback and its click-to-refocus as well,
+because games often run inside embedded previews (iframes) where focus and `e.code` are
+less reliable than in a normal tab.
+
 **Graceful failure.** A separate `<script>` before the game installs `window.onerror` and
 `unhandledrejection` handlers, so even a syntax error in the main script is reported. The
 loop wraps `update/render` in `try/catch`. Any crash cancels the animation frame and shows a

@@ -219,19 +219,38 @@
     const held = new Set(), presses = [], MAX_QUEUE = 4;
     const ALIAS = { KeyW: 'ArrowUp', KeyA: 'ArrowLeft', KeyS: 'ArrowDown', KeyD: 'ArrowRight' };
     const SCROLL_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'PageUp', 'PageDown', 'Home', 'End']);
+    let lastDevice = 'keyboard';
+    // Physical key code, falling back to e.key where e.code is empty or "Unidentified"
+    // (some WebViews, embedded previews, remote desktops and virtual keyboards).
+    function keyCode(e) {
+      if (e.code && e.code !== 'Unidentified') return e.code;
+      const k = e.key || '';
+      if (k === ' ' || k === 'Spacebar') return 'Space';
+      if (k === 'Esc') return 'Escape';
+      if (k === 'Up' || k === 'Down' || k === 'Left' || k === 'Right') return 'Arrow' + k;
+      if (/^[a-z]$/i.test(k)) return 'Key' + k.toUpperCase();
+      if (/^[0-9]$/.test(k)) return 'Digit' + k;
+      return k;
+    }
     function down(code) {
       if (!held.has(code) && presses.length < MAX_QUEUE) presses.push(code);
       held.add(code);
     }
     function up(code) { held.delete(code); }
     addEventListener('keydown', (e) => {
-      if (e.target instanceof HTMLButtonElement && (e.code === 'Enter' || e.code === 'Space')) return; // let buttons work
-      if (SCROLL_KEYS.has(e.code)) e.preventDefault(); // stop the page from scrolling
-      const code = ALIAS[e.code] || e.code;
+      const raw = keyCode(e);
+      if (e.target instanceof HTMLButtonElement && (raw === 'Enter' || raw === 'Space')) return; // let buttons work
+      if (SCROLL_KEYS.has(raw)) e.preventDefault(); // stop the page from scrolling
+      lastDevice = 'keyboard';
+      const code = ALIAS[raw] || raw;
       if (!e.repeat) { down(code); onCommandKey(code); }
     });
-    addEventListener('keyup', (e) => up(ALIAS[e.code] || e.code));
+    addEventListener('keyup', (e) => { const raw = keyCode(e); up(ALIAS[raw] || raw); });
     addEventListener('blur', () => held.clear()); // avoid "stuck" keys after alt-tab
+    // A pointer only "takes over" when it actually moves, so a mouse resting over the game
+    // never overrides the arrow keys in games that support both (aim with mouse OR keys).
+    addEventListener('pointermove', (e) => { if (e.movementX || e.movementY) lastDevice = 'pointer'; });
+    addEventListener('pointerdown', () => { lastDevice = 'pointer'; });
 
     // On-screen buttons feed the same queue as the keyboard.
     document.querySelectorAll('#touch [data-key]').forEach((btn) => {
@@ -251,6 +270,7 @@
       press: (code) => { if (presses.length < MAX_QUEUE) presses.push(code); }, // for swipes / custom buttons
       drain: () => presses.splice(0, presses.length),
       clear: () => { held.clear(); presses.length = 0; },
+      get lastDevice() { return lastDevice; }, // 'keyboard' | 'pointer': whichever was used last
     };
   })();
 
@@ -269,6 +289,12 @@
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
   }
   new ResizeObserver(resize).observe(canvas);
+
+  // Inside an embedded preview (iframe), keys only arrive while the game has focus.
+  // Any click or tap on the game area takes focus back, so the keyboard keeps working.
+  gameEl.addEventListener('pointerdown', (e) => {
+    if (!(e.target instanceof HTMLButtonElement)) gameEl.focus({ preventScroll: true });
+  });
   resize();
 
   // ===== HUD (only touch the DOM when a value actually changes) =====
@@ -294,6 +320,7 @@
     $('#hud').hidden = !(next === State.PLAYING || next === State.PAUSED);
     if (next === State.PLAYING) {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      try { window.focus(); } catch (_) {}
       gameEl.focus({ preventScroll: true });
     } else {
       const btn = { menu: '#btn-start', paused: '#btn-resume', over: '#btn-restart' }[next];
