@@ -207,6 +207,18 @@ function updateParts(dt) { for (const p of parts) if (p.life > 0) { p.life -= dt
 - Express levels as data: `const LEVELS = [{ rows: [...], speed: 1 }, ...]`, or
   generate procedurally from the level number with a difficulty function such as
   `speed = base * (1 + 0.12 * level)`, `spawnInterval = max(min, start * 0.9 ** level)`.
+- Starting-difficulty rules of thumb (use these instead of simulating play):
+  - Humans react in about 0.25 s, plus more time to move. At the start, telegraph each
+    threat for at least 1 s before it can hurt, and never let two threats need
+    simultaneous attention.
+  - Start the speed or spawn rate at about 40–50% of the maximum, ramp about 10% per level
+    or per 15–30 s, and cap the ramp at a ceiling a skilled player can survive.
+  - A new player should not lose a life in the first 20–30 s. A tutorial-like first threat
+    (one enemy, one ship, one easy board) teaches better than text.
+  - Grid games: 6–10 cells per second is a comfortable snake speed. Puzzle levels should
+    start solvable in 2–3 moves.
+  - Exploits: if one repeated action (constant sweeping, staying in a corner) beats the
+    game, add a dwell or charge time, a cooldown, or threats that punish it.
 - Show progression on the HUD (level, wave, remaining targets, timer) so players see
   where they stand.
 - Between levels, briefly show a "Level 2" banner (1–1.5 s) instead of jumping straight

@@ -44,6 +44,13 @@ that is fun in the first ten seconds. Make sensible design decisions yourself in
 quizzing the user, and mention the key choices when you deliver. Ask only when the request
 is genuinely ambiguous in a way that changes the whole game.
 
+Before writing code, spend a moment on balance. Ask what the laziest strategy that wins
+looks like (waving a beam back and forth, hugging one wall, spamming one button), and design
+the mechanic so it doesn't work. Common fixes are a dwell time, a cooldown, a resource
+cost, or threats from several directions. Set the starting difficulty with the rules of
+thumb in patterns §8. Settling balance here, by reasoning, is far cheaper than finding
+exploits with simulated players after the game is built.
+
 ### 2. Build from the template
 
 Copy `assets/game-template.html` to the output path (default `index.html` in the working
@@ -79,21 +86,39 @@ Prevent both:
 - **Without file tools** (plain chat), output the whole file in one fenced `html` block.
   If it won't fit, reduce scope until it does.
 
-### 4. Verify before delivering
+### 4. Verify before delivering, within a fixed budget
 
-Run the checker. It catches the things that are easy to forget and an unparseable script:
-```bash
-python3 <skill-dir>/scripts/check_game.py index.html
-```
-Fix every FAIL. Read each WARN and fix it unless it is deliberate. If Node and Playwright
-are available, also run the smoke test. It loads the game headlessly, starts it, plays
-random input, injects an error to test the overlay, checks phone layout and saves
-screenshots you can look at:
-```bash
-NODE_PATH="$(npm root -g)" node <skill-dir>/scripts/smoke_test.js index.html --out /tmp/smoke
-```
-Look at the screenshots. A blank canvas or an overlapping HUD shows up here and nowhere else.
-Then reread your game logic once, specifically for the pitfalls listed below.
+The two bundled scripts already test what generated games most often get wrong. Run them as
+black boxes: their output explains each failure, so you don't need to read their source.
+
+1. Run the static checker. It covers the requirements and parses every script:
+   ```bash
+   python3 <skill-dir>/scripts/check_game.py index.html
+   ```
+   Fix every FAIL. Fix each WARN unless it is deliberate.
+2. If Node and Playwright are available, run the smoke test once. It loads the game
+   headlessly, starts it, plays random input, injects an error to test the overlay, checks
+   the phone layout and saves screenshots:
+   ```bash
+   NODE_PATH="$(npm root -g)" node <skill-dir>/scripts/smoke_test.js index.html --out /tmp/smoke
+   ```
+3. Look once at the start, play and phone screenshots. A blank canvas or an overlapping HUD
+   shows up here and nowhere else.
+4. Reread your game logic once, against the pitfalls listed below.
+
+Then deliver. Don't build extra test infrastructure on top: no custom Playwright scripts,
+no bots that play the game, no instrumented copies of the file, and no rounds of difficulty
+simulation. In testing, that extra work doubled build time and token cost, and it mostly
+confirmed what the checks and a careful reread had already shown. Balance belongs in the
+design step, and the player can ask for tuning once they've played.
+
+Two narrow exceptions are worth their cost:
+- **Pure rule functions,** such as a puzzle solver, level generator or scoring formula,
+  can be checked with a single throwaway `node -e` run before you wire them in.
+- **A failing check you can't explain** from its message and a reread can get one small,
+  targeted reproduction.
+
+If a fix touches the file, rerun only the checker and the smoke test.
 
 ### 5. Deliver
 
